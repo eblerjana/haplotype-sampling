@@ -52,7 +52,7 @@ rule evaluation_alleles_per_bubble:
 		"../envs/genotyping.yml"
 	resources:
 		mem_mb=20000,
-		walltime="1:00:00"
+#		walltime="1:00:00"
 	shell:
 		"""
 		zcat {input} | python3 workflow/scripts/variant-statistics.py {output.plot} 1 > {output.bed}
@@ -139,7 +139,7 @@ rule evaluation_remove_untypable:
 		vartype = "|".join(ALLOWED_VARIANTS)
 	resources:
 		mem_mb = 20000,
-		walltime = "1:00:00"
+#		walltime = "1:00:00"
 	priority: 1
 	shell:
 		"""
@@ -201,7 +201,7 @@ rule evaluation_vcfeval:
 		which = "--all-records"
 	resources:
 		mem_mb = 30000,
-		walltime = "1:40:00"
+#		walltime = "1:40:00"
 	shell:
 		"""
 		rtg vcfeval -b {input.baseline} -c {input.callset} -t {input.sdf} -o {params.tmp} --ref-overlap --evaluation-regions {input.regions} {params.which} --Xmax-length 30000 > {output}.tmp
@@ -260,7 +260,7 @@ rule evaluation_genotype_concordances:
 		"{results}/leave-one-out/pangenie/{mode}-{size}/{sample}/concordance/{regions}_{vartype}/summary.log"
 	resources:
 		mem_mb = 40000,
-		walltime = "0:40:00"
+#		walltime = "0:40:00"
 	priority: 1
 	shell:
 		"""

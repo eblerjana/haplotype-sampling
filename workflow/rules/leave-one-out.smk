@@ -79,7 +79,7 @@ rule leave_one_out_pangenie_index:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie-index -v {input.vcf} -r {input.fasta} -o {params.out_prefix} -t {threads}  &> {log}
+		PanGenie-index -v {input.vcf} -r {input.fasta} -o {params.out_prefix} -t {threads} -e 100000  &> {log}
 		"""
 
 
@@ -108,7 +108,7 @@ rule leave_one_out_pangenie_genotype_subset:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -a {wildcards.size} &> {log}
+		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -a {wildcards.size} -e 100000 &> {log}
 		"""
 
 
@@ -121,7 +121,8 @@ rule leave_one_out_pangenie_genotype_sampling:
 		index = "{results}/leave-one-out/pangenie/index-{sample}/"
 	output:
 		genotypes = "{results}/leave-one-out/pangenie/sampled-{size}/{sample}/{sample}-pangenie_multi_genotyping.vcf",
-		panel = "{results}/leave-one-out/pangenie/sampled-{size}/{sample}/{sample}-pangenie_multi_panel.vcf"
+		panel = "{results}/leave-one-out/pangenie/sampled-{size}/{sample}/{sample}-pangenie_multi_panel.vcf",
+		paths = expand("{{results}}/leave-one-out/pangenie/sampled-{{size}}/{{sample}}/{{sample}}-pangenie_multi_paths_{chromosome}.tsv", chromosome = CHROMOSOMES)
 	log:
 		"{results}/leave-one-out/pangenie/sampled-{size}/{sample}/{sample}-pangenie_multi_genotyping.log"
 	resources:
@@ -142,7 +143,7 @@ rule leave_one_out_pangenie_genotype_sampling:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -d -x {params.size} -y {params.pop_size} &> {log}
+		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -d -x {params.size} -y {params.pop_size} -e 100000 &> {log}
 		"""
 
 

@@ -1,7 +1,6 @@
 import sys
 import argparse
 import pandas as pd
-import seaborn as sns
 
 def get_alleles(fields, present_in_ht = False):
 	"""
@@ -185,7 +184,7 @@ def write_summary_stats(filename, outname, sample, size):
 				for c in categories:
 					# print ratios
 					ratio = category_to_counts[c][0] / category_to_counts[c][1] if category_to_counts[c][1] > 0 else 0.0
-					outfile.write('\t'.join([sample, size, chrom, genotype, c, str(category_to_counts[c][1]), str(category_to_counts[c][0]), str(ratio)]) + '\n')
+					outfile.write('\t'.join([sample, size, chrom, genotype, c, str(category_to_counts[c][1]), str(category_to_counts[c][0]), str(ratio * 100.0)]) + '\n')
 	
 
 

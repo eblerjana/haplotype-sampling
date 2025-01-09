@@ -1,3 +1,4 @@
+import gzip
 configfile: "config/config.yaml"
 
 PANEL_BI = config["panel_bi"]
@@ -12,7 +13,15 @@ ALLOWED_VARIANTS = ['snp', 'indels', 'large-deletion', 'large-insertion', 'large
 LEAVE_ONE_OUT_SAMPLES = config["leave_one_out_samples"]
 EVALUATION_REGIONS = config["evaluation_regions"]
 
-include: "rules/pangenie.smk"
+CHROMOSOMES = set([])
+for line in gzip.open(PANEL_MULTI, 'rt'):
+	if line.startswith('#'):
+		continue
+	fields = line.split('\t')
+	CHROMOSOMES.add(fields[0])
+CHROMOSOMES = list(CHROMOSOMES)
+
+#include: "rules/pangenie.smk"
 include: "rules/leave-one-out.smk"
 include: "rules/evaluation_leave-one-out.smk"
 include: "rules/evaluation_panel.smk"
@@ -20,7 +29,8 @@ include: "rules/evaluation_panel.smk"
 
 rule all:
 	input:
-		expand("{results}/leave-one-out/pangenie/plots/{metric}_{regions}.pdf", results = OUTNAME, metric = ["concordance", "precision-recall-typable"], regions = ["biallelic", "multiallelic"] + [k for k in EVALUATION_REGIONS.keys()]),
-		expand("{results}/leave-one-out/pangenie/plots/concordance-vs-untyped_{regions}.pdf", results = OUTNAME, regions = ["biallelic", "multiallelic"] + [k for k in EVALUATION_REGIONS.keys()]),
-		expand("{results}/leave-one-out/pangenie/plots/resources.pdf", results = OUTNAME),
-		expand("{results}/leave-one-out/pangenie/plots/panel-stats.pdf", results = OUTNAME)
+#		expand("{results}/leave-one-out/pangenie/plots/{metric}_{regions}.pdf", results = OUTNAME, metric = ["concordance", "precision-recall-typable"], regions = ["biallelic", "multiallelic"] + [k for k in EVALUATION_REGIONS.keys()]),
+#		expand("{results}/leave-one-out/pangenie/plots/concordance-vs-untyped_{regions}.pdf", results = OUTNAME, regions = ["biallelic", "multiallelic"] + [k for k in EVALUATION_REGIONS.keys()]),
+#		expand("{results}/leave-one-out/pangenie/plots/resources.pdf", results = OUTNAME),
+		expand("{results}/leave-one-out/pangenie/plots/panel-stats.pdf", results = OUTNAME),
+		expand("{results}/leave-one-out/pangenie/plots/recombination-stats.pdf", results = OUTNAME)

@@ -29,7 +29,7 @@ def plot_bubble_stats(filename, outfile):
 						for sample, covered in zip(df_subset['sample'], df_subset['covered_alleles[%]']):
 							to_plot[size][sample_to_index[sample]] = covered
 					df_figure = pd.DataFrame(to_plot, index=list(samples))
-					a = df_figure.plot.line(ax=axes[i,j], ylabel='ground truth alleles covered [%]',  title = genotype + ', ' + category, rot=90, style='.-', ylim=[-0.1, 1.1])
+					a = df_figure.plot.line(ax=axes[i,j], ylabel='ground truth alleles covered [%]',  title = genotype + ', ' + category, rot=90, style='.-', ylim=[-0.1, 100.1])
 			plt.setp(axes, xticks=[i for i in range(len(samples))], xticklabels=list(samples))
 			fig.suptitle(chrom, size=16)
 			fig.tight_layout(rect=[0, 0.03, 1, 0.95])
