@@ -197,8 +197,8 @@ if __name__ == '__main__':
 	parser.add_argument('-size', metavar='SIZE', help='Sampling size.', required=True)
 	args = parser.parse_args()
 
-	bubble_outfile = args.outname + '_bubble_' + args.sample + '-' + args.size + '.tsv'
-	summary_outfile = args.outname + '_summary_' + args.sample + '-' + args.size + '.tsv'
+	bubble_outfile = args.outname + '_bubble_' + args.sample + '_' + args.size + '.tsv'
+	summary_outfile = args.outname + '_summary_' + args.sample + '_' + args.size + '.tsv'
 
 	# write per bubble statistics
 	write_bubble_stats(args.truth, args.panel, bubble_outfile)

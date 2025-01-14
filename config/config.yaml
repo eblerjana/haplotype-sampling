@@ -33,9 +33,12 @@ sampling_sizes:
 
 subsetting_sizes:
         - 108
+        - 15
+        - 10
+        - 5
+#        - 2  # skipping this for now because it's very slow (> 10hrs)
 
 evaluation_regions: {}
 
 # name of the output folder
-outname: "results-commit-9ea9dde"
-#outname: "results-commit-16695ed"
+outname: "results-commit-66b6b3e"

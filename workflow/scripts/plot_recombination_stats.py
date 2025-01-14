@@ -5,28 +5,32 @@ import seaborn as sns
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.pyplot as plt
 from collections import defaultdict
-
+import numpy as np
 
 def plot_recombination_stats(files, outfile, chromosomes, samples, sampling_sizes):
-	chromosomes = ['whole_genome'] + chromosomes
+	chromosomes = ['whole_genome'] + sorted(chromosomes)
 	print("Processing chromosomes: " + ','.join(chromosomes))
 
 	with PdfPages(outfile) as pdf:
 		for chrom in chromosomes:
 			fig, axes = plt.subplots(figsize=(35,5), nrows=1, ncols=len(sampling_sizes))
+			max_y = 0
 			for i,s in enumerate(sampling_sizes):
 				# create data frame containing data for all samples
 				dfs = []
 				for sample in samples:
 					dfs.append(pd.read_csv(files[(sample, s)], sep='\t'))
 				df = pd.concat(dfs)
-				print(df)
-				print(df['sampling_size'].unique(), s)
 				assert df['sampling_size'].unique() == [s]
 				df_subset = df[df['chromosome'] == chrom]
+				max_val = df_subset.max(numeric_only=True).max()
+				if max_val > max_y:
+					max_y = max_val
 				df_subset.plot(ax=axes[i], x='sample', kind='bar', title='sampling parameters: ' + s, ylabel='number of recombination events')
+				axes[i].legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
 			fig.suptitle(chrom, size=16)
 			fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+			plt.setp(axes, ylim=(0, max_y + 1000))
 			pdf.savefig()
 			plt.close()
 
@@ -50,7 +54,7 @@ if __name__ == '__main__':
 		samples.add(sample)
 		sampling_sizes.add(sampling_size)
 	samples = sorted(list(samples))
-	sampling_sizes = sorted(list(sampling_sizes))
+	sampling_sizes = sorted(list(sampling_sizes), key=lambda s: int(s.split('-')[0]))
 
 
 	print(samples)

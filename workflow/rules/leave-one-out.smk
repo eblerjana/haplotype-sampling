@@ -79,7 +79,7 @@ rule leave_one_out_pangenie_index:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie-index -v {input.vcf} -r {input.fasta} -o {params.out_prefix} -t {threads} -e 100000  &> {log}
+		PanGenie-index -v {input.vcf} -r {input.fasta} -o {params.out_prefix} -t {threads}  &> {log}
 		"""
 
 
@@ -96,7 +96,7 @@ rule leave_one_out_pangenie_genotype_subset:
 		"{results}/leave-one-out/pangenie/subset-{size}/{sample}/{sample}-pangenie_multi_genotyping.log"
 	resources:
 		mem_mb = 70000,
-		walltime = "5:00:00"
+		walltime = "10:00:00"
 	params:
 		index = "{results}/leave-one-out/pangenie/index-{sample}/index",
 		out_prefix = "{results}/leave-one-out/pangenie/subset-{size}/{sample}/{sample}-pangenie_multi"
@@ -108,7 +108,7 @@ rule leave_one_out_pangenie_genotype_subset:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -a {wildcards.size} -e 100000 &> {log}
+		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -a {wildcards.size} &> {log}
 		"""
 
 
@@ -143,7 +143,7 @@ rule leave_one_out_pangenie_genotype_sampling:
 		"workflow/container/eblerjana_eblerjana_pangenie-sampler.sif"
 	shell:
 		"""
-		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -d -x {params.size} -y {params.pop_size} -e 100000 &> {log}
+		PanGenie -f {params.index} -i <(gunzip -c {input.reads}) -o {params.out_prefix} -t {threads} -j {threads} -d -x {params.size} -y {params.pop_size} &> {log}
 		"""
 
 
